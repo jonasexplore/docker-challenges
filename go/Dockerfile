@@ -1,7 +1,13 @@
-FROM golang:1.20.1-alpine3.17
+FROM golang:alpine as build
 
 WORKDIR /go/src/hello
 
 COPY . .
 
-CMD ["go", "run", "hello-world.go"]
+RUN CGO_ENABLED=0 go build -o /hello hello-world.go
+
+FROM scratch
+
+COPY --from=build /hello /hello
+
+CMD ["/hello"]
