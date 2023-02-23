@@ -9,6 +9,20 @@ services:
         container_name: node
         depends_on:
             - nginx
+            - db
+
+    db:
+        image: mysql:5.7
+        command: --innodb-use-native-aio=0
+        container_name: db
+        restart: always
+        tty: true
+        volumes:
+            - ./mysql:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: nodedb
+            MYSQL_PASSWORD: root
 
     nginx:
         restart: always
